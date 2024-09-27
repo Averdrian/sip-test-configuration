@@ -1,0 +1,40 @@
+# Usa la imagen de Ubuntu como base
+FROM ubuntu
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /home/ubuntu
+
+
+RUN apt-get update && apt-get install -y \
+    bash
+COPY ./pjproject*/pjsip-apps/bin/pjsua* /usr/local/bin/pjsua
+# RUN apt install nano -y
+# RUN apt install wget -y
+# RUN apt install gcc -y
+# RUN apt install g++ -y
+# RUN apt install make -y
+# RUN wget https://github.com/pjsip/pjproject/archive/refs/tags/2.14.1.tar.gz -O /home/ubuntu/pjsua.tar.gz
+# RUN tar -xzf /home/ubuntu/pjsua.tar.gz
+# RUN rm pjsua.tar.gz
+# RUN mv ./pj* ./pjsua
+
+# WORKDIR /home/ubuntu/pjsua
+# RUN ./configure && make dep && make
+# RUN export CFLAGS="$CFLAGS -fPIC"
+# RUN cp ./pjsip-apps/bin/pjsua* /usr/local/bin/pjsua
+
+
+# Copia tu script.sh al contenedor en /usr/local/bin/
+# COPY script.sh /usr/local/bin/script.sh
+
+# COPY script.sh /home/ubuntu/script.sh
+
+# Asegúrate de que el script sea ejecutable dentro del contenedor
+# RUN chmod +x /usr/local/bin/script.sh
+# RUN chmod +x /home/ubuntu/script.sh
+
+# ENTRYPOINT [ "/home/ubuntu/script.sh" ]
+
+# Ejecuta el script automáticamente cuando se cree el contenedor
+# CMD ["/usr/local/bin/script.sh"]

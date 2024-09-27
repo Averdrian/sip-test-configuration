@@ -1,0 +1,45 @@
+version: '3'
+services:
+  client1:
+    build:
+      context: .
+      dockerfile: Dockerfile_Pjsua
+      args:
+        - PORT=5061
+        - USER=cliente1
+    container_name: client1
+    tty: true
+    networks:
+      - my_network
+    ports: 
+      - "5061:5061"
+
+  client2:
+    build:
+      context: .
+      dockerfile: Dockerfile_Pjsua
+      args:
+        - PORT=5062
+        - USER=cliente2
+    container_name: client2
+    tty: true
+    networks:
+      - my_network
+    ports: 
+      - "5062:5062"
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile_Kamailio
+    container_name: proxy
+    tty: true
+    stdin_open: true
+    networks:
+      - my_network
+    ports:
+      - "5060:5060/udp"
+
+networks:
+  my_network:
+    driver: bridge
