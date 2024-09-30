@@ -4,19 +4,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 
 RUN apt-get update && apt-get install -y \
-    bash
-RUN apt install nano -y
-RUN apt install default-mysql-server -y
-RUN apt install kamailio -y
-RUN apt install kamailio-mysql-modules -y
-
+    bash default-mysql-server kamailio kamailio-mysql-modules sngrep
 
 RUN echo "DBENGINE=MYSQL" >> /etc/kamailio/kamctlrc
-
-RUN service mysql start
 
 COPY kamailio /etc/default/kamailio
 COPY kamailio.cfg /etc/kamailio/kamailio.cfg
 
 
+COPY kamailio.sh /usr/local/bin
+RUN  chmod +x /usr/local/bin/kamailio.sh
+
+
 WORKDIR /home/ubuntu
+
+ENTRYPOINT [ "kamailio.sh" ]

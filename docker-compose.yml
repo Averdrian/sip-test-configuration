@@ -4,28 +4,28 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_Pjsua
-      args:
-        - PORT=5061
-        - USER=cliente1
+    environment:
+      PORT: "5061"
+      CLIENT: "cliente1"
     container_name: client1
     tty: true
     networks:
       - my_network
-    ports: 
+    ports:
       - "5061:5061"
 
   client2:
     build:
       context: .
       dockerfile: Dockerfile_Pjsua
-      args:
-        - PORT=5062
-        - USER=cliente2
+    environment:
+      PORT: "5062"
+      CLIENT: "cliente2"
     container_name: client2
     tty: true
     networks:
       - my_network
-    ports: 
+    ports:
       - "5062:5062"
 
   proxy:
@@ -38,6 +38,7 @@ services:
     networks:
       - my_network
     ports:
+      - "5060:5060/tcp"
       - "5060:5060/udp"
 
 networks:
