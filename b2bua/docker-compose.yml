@@ -2,10 +2,10 @@ services:
   client1:
     build:
       context: .
-      dockerfile: Dockerfile_Pjsua
+      dockerfile: Dockerfile_UA
     environment:
       PORT: "5061"
-      CLIENT: "cliente1"
+      CLIENT: "client1"
     container_name: client1
     tty: true
     networks:
@@ -16,10 +16,10 @@ services:
   client2:
     build:
       context: .
-      dockerfile: Dockerfile_Pjsua
+      dockerfile: Dockerfile_UA
     environment:
       PORT: "5062"
-      CLIENT: "cliente2"
+      CLIENT: "client2"
     container_name: client2
     tty: true
     networks:
@@ -27,11 +27,11 @@ services:
     ports:
       - "5062:5062"
 
-  proxy:
+  b2bua:
     build:
       context: .
-      dockerfile: Dockerfile_Kamailio
-    container_name: proxy
+      dockerfile: Dockerfile_B2B
+    container_name: b2bua
     tty: true
     stdin_open: true
     networks:
