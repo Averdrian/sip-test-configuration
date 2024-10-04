@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     sngrep \
     git \
-    make
+    make \
+    iproute2
 
 #Install go
 RUN apt-get install software-properties-common -y

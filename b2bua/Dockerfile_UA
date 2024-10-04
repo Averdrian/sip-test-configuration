@@ -45,5 +45,7 @@ RUN chmod +x /usr/local/bin/pjsua.sh
 
 WORKDIR /home/ubuntu
 
+RUN apt install iproute2 -y
+
 
 ENTRYPOINT [ "pjsua.sh" ]

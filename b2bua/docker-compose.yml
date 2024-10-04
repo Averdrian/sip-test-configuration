@@ -12,6 +12,8 @@ services:
       - my_network
     ports:
       - "5061:5061"
+    cap_add:
+    - NET_ADMIN
 
   client2:
     build:
@@ -26,6 +28,8 @@ services:
       - my_network
     ports:
       - "5062:5062"
+    cap_add:
+    - NET_ADMIN
 
   b2bua:
     build:
@@ -39,7 +43,13 @@ services:
     ports:
       - "5060:5060/tcp"
       - "5060:5060/udp"
+    cap_add:
+    - NET_ADMIN
 
 networks:
   my_network:
     driver: bridge
+    ipam:
+      config:
+      - subnet: 10.5.0.0/16
+        gateway: 10.5.0.1
