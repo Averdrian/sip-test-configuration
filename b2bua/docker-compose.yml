@@ -2,7 +2,7 @@ services:
   client1:
     build:
       context: .
-      dockerfile: Dockerfile_UA
+      dockerfile: UA.Dockerfile
     environment:
       PORT: "5061"
       CLIENT: "client1"
@@ -18,7 +18,7 @@ services:
   client2:
     build:
       context: .
-      dockerfile: Dockerfile_UA
+      dockerfile: UA.Dockerfile
     environment:
       PORT: "5062"
       CLIENT: "client2"
@@ -34,7 +34,7 @@ services:
   b2bua:
     build:
       context: .
-      dockerfile: Dockerfile_B2B
+      dockerfile: B2B.Dockerfile
     container_name: b2bua
     tty: true
     stdin_open: true
