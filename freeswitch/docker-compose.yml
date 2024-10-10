@@ -1,35 +1,37 @@
 services:
-  # client1:
-  #   build:
-  #     context: .
-  #     dockerfile: UA.Dockerfile
-  #   environment:
-  #     PORT: "5061"
-  #     CLIENT: "client1"
-  #   container_name: client1
-  #   tty: true
-  #   networks:
-  #     - my_network
-  #   ports:
-  #     - "5061:5061"
-  #   cap_add:
-  #   - NET_ADMIN
+  client1:
+    build:
+      context: .
+      dockerfile: UA.Dockerfile
+    environment:
+      PORT: "5091"
+      CLIENT: "client1"
+    container_name: client1
+    tty: true
+    networks:
+      system-test:
+        ipv4_address: 10.22.80.5
+    ports:
+      - "5091:5091"
+    cap_add:
+    - NET_ADMIN
 
-  # client2:
-  #   build:
-  #     context: .
-  #     dockerfile: UA.Dockerfile
-  #   environment:
-  #     PORT: "5062"
-  #     CLIENT: "client2"
-  #   container_name: client2
-  #   tty: true
-  #   networks:
-  #     - my_network
-  #   ports:
-  #     - "5062:5062"
-  #   cap_add:
-  #   - NET_ADMIN
+  client2:
+    build:
+      context: .
+      dockerfile: UA.Dockerfile
+    environment:
+      PORT: "5092"
+      CLIENT: "client2"
+    container_name: client2
+    tty: true
+    networks:
+      system-test:
+        ipv4_address: 10.22.80.6
+    ports:
+      - "5092:5092"
+    cap_add:
+    - NET_ADMIN
 
   freeswitch:
     # image: ghcr.io/zaleos/inivr-dev-system-db:1
