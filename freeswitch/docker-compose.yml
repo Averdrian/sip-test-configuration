@@ -1,0 +1,86 @@
+services:
+  # client1:
+  #   build:
+  #     context: .
+  #     dockerfile: UA.Dockerfile
+  #   environment:
+  #     PORT: "5061"
+  #     CLIENT: "client1"
+  #   container_name: client1
+  #   tty: true
+  #   networks:
+  #     - my_network
+  #   ports:
+  #     - "5061:5061"
+  #   cap_add:
+  #   - NET_ADMIN
+
+  # client2:
+  #   build:
+  #     context: .
+  #     dockerfile: UA.Dockerfile
+  #   environment:
+  #     PORT: "5062"
+  #     CLIENT: "client2"
+  #   container_name: client2
+  #   tty: true
+  #   networks:
+  #     - my_network
+  #   ports:
+  #     - "5062:5062"
+  #   cap_add:
+  #   - NET_ADMIN
+
+  freeswitch:
+    # image: ghcr.io/zaleos/inivr-dev-system-db:1
+    build:
+      context: .
+      dockerfile: FreeSwitch.Dockerfile
+      args:
+        - USER_ID=1000
+        - GROUP_ID=1000
+      # labels:
+        # - or.opencontainers.image.source=https://github.com/Averdrian/sip-test-configuration
+    volumes:
+      - ./freeswitch/config/vars.xml:/etc/freeswitch/vars.xml
+      - ./freeswitch/config/autoload_configs/acl.conf.xml:/etc/freeswitch/autoload_configs/acl.conf.xml
+      - ./freeswitch/config/autoload_configs/event_socket.conf.xml:/etc/freeswitch/autoload_configs/event_socket.conf.xml
+      - ./freeswitch/config/autoload_configs/http_cache.conf.xml:/etc/freeswitch/autoload_configs/http_cache.conf.xml
+      - ./freeswitch/config/dialplan/ivr.xml:/etc/freeswitch/dialplan/ivr.xml
+      - ./freeswitch/config/sip_profiles/internal.xml:/etc/freeswitch/sip_profiles/internal.xml
+      - /home/zaleos/Workspaces/sip-test-configuration/freeswitch/coredumps:/var/crash
+    ulimits:
+      core: -1
+    environment:
+      - IP_INIVR=10.22.80.2
+      - IP_FREESWITCH=10.22.80.3
+    networks:
+      system-test:
+        ipv4_address: 10.22.80.3
+
+  db:
+    image: mysql:8.0.32
+    environment:
+      - MYSQL_USER=inivr
+      - MYSQL_PASSWORD=myinivrpassword
+      - MYSQL_ROOT_PASSWORD=mysecretpassword
+      - MYSQL_DATABASE=inivr
+    healthcheck:
+      test: ["CMD", "mysql", "-h", "10.5.0.3", "-u", "root", "-pmysecretpassword", "-e", "SELECT 1"]
+      interval: 1s
+      timeout: 1s
+      retries: 60
+      start_period: 30s
+    ulimits:
+      core: -1
+    networks:
+      system-test:
+        ipv4_address: 10.22.80.4
+
+networks:
+  system-test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.22.80.0/24
+          gateway: 10.22.80.1

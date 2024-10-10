@@ -1,0 +1,9 @@
+<include>
+    <context name="ivr">
+        <extension name="ivr_default">
+            <condition>
+                <action application="socket" data="$${ivr_ip}:8084 async full"/>
+            </condition>
+        </extension>
+    </context>
+</include>
