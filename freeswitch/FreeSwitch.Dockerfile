@@ -12,9 +12,9 @@
     
     # explicitly set user/group IDs
     RUN groupadd -r freeswitch --gid=999 && useradd -r -g freeswitch --uid=999 freeswitch
-    
+
     # grab gosu for easy step-down from root
-    RUN apt-get update && apt-get install -y gnupg2
+    RUN apt-get update && apt-get install -y gnupg2 sngrep
     ARG GPG_KEYS="B42F6819007F00F88E364FD4036A9C25BF357DD4"
     RUN gpg --keyserver keyserver.ubuntu.com --recv-keys "$GPG_KEYS" \
         || gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEYS" \
@@ -57,6 +57,7 @@
         freeswitch-mod-console \
         freeswitch-mod-http-cache \
         freeswitch-sounds-en-us-callie \
+        freeswitch-mod-lua \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
     
     # Clean up

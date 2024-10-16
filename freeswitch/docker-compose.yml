@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: UA.Dockerfile
     environment:
-      PORT: "5092"
+      PORT: "5060"
       CLIENT: "client2"
     container_name: client2
     tty: true
@@ -29,7 +29,7 @@ services:
       system-test:
         ipv4_address: 10.22.80.6
     ports:
-      - "5092:5092"
+      - "5060:5060"
     cap_add:
     - NET_ADMIN
 
@@ -44,13 +44,17 @@ services:
       # labels:
         # - or.opencontainers.image.source=https://github.com/Averdrian/sip-test-configuration
     volumes:
-      - ./freeswitch/config/vars.xml:/etc/freeswitch/vars.xml
-      - ./freeswitch/config/autoload_configs/acl.conf.xml:/etc/freeswitch/autoload_configs/acl.conf.xml
-      - ./freeswitch/config/autoload_configs/event_socket.conf.xml:/etc/freeswitch/autoload_configs/event_socket.conf.xml
-      - ./freeswitch/config/autoload_configs/http_cache.conf.xml:/etc/freeswitch/autoload_configs/http_cache.conf.xml
-      - ./freeswitch/config/dialplan/ivr.xml:/etc/freeswitch/dialplan/ivr.xml
-      - ./freeswitch/config/sip_profiles/internal.xml:/etc/freeswitch/sip_profiles/internal.xml
+      # - ./config/vars.xml:/etc/freeswitch/vars.xml
+      # - ./config/autoload_configs/acl.conf.xml:/etc/freeswitch/autoload_configs/acl.conf.xml
+      # - ./config/autoload_configs/event_socket.conf.xml:/etc/freeswitch/autoload_configs/event_socket.conf.xml
+      # - ./config/autoload_configs/http_cache.conf.xml:/etc/freeswitch/autoload_configs/http_cache.conf.xml
+      # - ./config/dialplan/ivr.xml:/etc/freeswitch/dialplan/ivr.xml
+      # - ./config/sip_profiles/internal.xml:/etc/freeswitch/sip_profiles/internal.xml
       - /home/zaleos/Workspaces/sip-test-configuration/freeswitch/coredumps:/var/crash
+      # - ./config/dialplan/default.xml:/etc/freeswitch/dialplan/default.xml
+      -  ./scripts:/etc/freeswitch/scripts
+      -  ./config:/etc/freeswitch
+      # - /config/default.xml:/etc/freeswitch/default.xml
     ulimits:
       core: -1
     environment:
