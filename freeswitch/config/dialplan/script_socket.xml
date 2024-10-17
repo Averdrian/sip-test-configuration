@@ -1,0 +1,9 @@
+<include>
+    <context name="script_socket">
+        <extension name="ivr_default">
+            <condition>
+                <action application="socket" data="10.22.80.7:7000"/>
+            </condition>
+        </extension>
+    </context>
+</include>

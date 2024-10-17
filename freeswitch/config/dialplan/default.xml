@@ -1,0 +1,9 @@
+<include>
+    <context name="default">
+        <extension name="ivr_default">
+            <condition>
+                <action application="bridge" data="sofia/internal/client2@10.22.80.6"/>
+            </condition>
+        </extension>
+    </context>
+</include>

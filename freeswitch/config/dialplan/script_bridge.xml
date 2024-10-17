@@ -1,0 +1,9 @@
+<include>
+    <context name="script_curl">
+        <extension name="ivr_default">
+            <condition>
+                <action application="curl" data="10.22.80.7:7000 async full"/>
+            </condition>
+        </extension>
+    </context>
+</include>

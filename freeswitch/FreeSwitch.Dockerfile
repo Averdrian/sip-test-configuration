@@ -58,6 +58,7 @@
         freeswitch-mod-http-cache \
         freeswitch-sounds-en-us-callie \
         freeswitch-mod-lua \
+        freeswitch-mod-curl \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
     
     # Clean up

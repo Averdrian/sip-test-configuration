@@ -83,6 +83,19 @@ services:
       system-test:
         ipv4_address: 10.22.80.4
 
+  web_service:
+    build:
+      context: .
+      dockerfile: Flask.Dockerfile
+    tty: true
+    volumes:
+    -  ./web_service:/app
+    ports:
+    -  "7000:7000"
+    networks:
+      system-test:
+        ipv4_address: 10.22.80.7
+
 networks:
   system-test:
     driver: bridge

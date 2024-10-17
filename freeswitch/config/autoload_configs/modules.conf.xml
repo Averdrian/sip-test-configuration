@@ -23,6 +23,7 @@
 
     <!-- Other Modules -->
     <load module="mod_logfile"/>
+    <load module="mod_curl"/>
 
     <!-- Añade otros módulos que necesites -->
   </modules>

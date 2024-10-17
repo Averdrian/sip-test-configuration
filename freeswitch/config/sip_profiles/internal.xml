@@ -1,15 +1,15 @@
 <profile name="internal">
   <settings>
-    <param name="auth-calls" value="true"/>
+    <param name="auth-calls" value="false"/>
     <!-- Force subscription requests to require authentication -->
-    <param name="auth-subscriptions" value="true"/>
+    <param name="auth-subscriptions" value="false"/>
     <param name="apply-nat-acl" value="nat.auto"/>
 
     <param name="debug" value="0"/>
     <param name="sip-trace" value="yes"/>
 
     <param name="dialplan" value="XML"/>
-    <param name="context" value="ivr"/>
+    <param name="context" value="script_curl"/>
     <param name="codec-prefs" value="$${global_codec_prefs}"/>
     <param name="apply-inbound-acl" value="lan"/>
     <param name="auth-calls" value="$${internal_auth_calls}"/>
@@ -19,5 +19,7 @@
     <param name="ext-rtp-ip" value="$${external_rtp_ip}"/>
     <param name="ext-sip-ip" value="$${external_sip_ip}"/>
     <param name="sip-port" value="$${internal_sip_port}"/>
+    <param name="fire-reg-events" value="true"/>
+    <param name="lua-on-register" value="register.lua"/>
   </settings>
 </profile>
