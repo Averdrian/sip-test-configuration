@@ -65,11 +65,11 @@ services:
         ipv4_address: 10.22.80.3
 
   db:
-    image: mysql:8.0.32
+    image: mysql:8.0.40-debian
     environment:
-      - MYSQL_USER=inivr
-      - MYSQL_PASSWORD=myinivrpassword
-      - MYSQL_ROOT_PASSWORD=mysecretpassword
+      # - MYSQL_USER=root
+      # - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=inivr
     healthcheck:
       test: ["CMD", "mysql", "-h", "10.5.0.3", "-u", "root", "-pmysecretpassword", "-e", "SELECT 1"]

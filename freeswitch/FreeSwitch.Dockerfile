@@ -59,6 +59,8 @@
         freeswitch-sounds-en-us-callie \
         freeswitch-mod-lua \
         freeswitch-mod-curl \
+        freeswitch-mod-easyroute \
+        freeswitch-mod-lcr \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
     
     # Clean up
