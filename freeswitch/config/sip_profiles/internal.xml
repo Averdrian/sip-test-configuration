@@ -9,7 +9,7 @@
     <param name="sip-trace" value="yes"/>
 
     <param name="dialplan" value="XML"/>
-    <param name="context" value="script_curl"/>
+    <param name="context" value="easy_route"/>
     <param name="codec-prefs" value="$${global_codec_prefs}"/>
     <param name="apply-inbound-acl" value="lan"/>
     <param name="auth-calls" value="$${internal_auth_calls}"/>

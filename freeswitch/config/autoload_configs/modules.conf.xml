@@ -4,7 +4,7 @@
     <load module="mod_sofia"/> <!-- SIP module -->
     <load module="mod_loopback"/>
     <load module="mod_commands"/>
-    <load module="mod_conference"/>
+    <!-- <load module="mod_conference"/> -->
     <load module="mod_dptools"/>
     <load module="mod_expr"/>
     <load module="mod_dialplan_xml"/>
@@ -24,6 +24,8 @@
     <!-- Other Modules -->
     <load module="mod_logfile"/>
     <load module="mod_curl"/>
+    <load module="mod_easyroute"/>
+    <load module="mod_lcr"/>
 
     <!-- Añade otros módulos que necesites -->
   </modules>

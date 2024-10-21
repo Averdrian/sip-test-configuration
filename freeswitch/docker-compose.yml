@@ -44,17 +44,9 @@ services:
       # labels:
         # - or.opencontainers.image.source=https://github.com/Averdrian/sip-test-configuration
     volumes:
-      # - ./config/vars.xml:/etc/freeswitch/vars.xml
-      # - ./config/autoload_configs/acl.conf.xml:/etc/freeswitch/autoload_configs/acl.conf.xml
-      # - ./config/autoload_configs/event_socket.conf.xml:/etc/freeswitch/autoload_configs/event_socket.conf.xml
-      # - ./config/autoload_configs/http_cache.conf.xml:/etc/freeswitch/autoload_configs/http_cache.conf.xml
-      # - ./config/dialplan/ivr.xml:/etc/freeswitch/dialplan/ivr.xml
-      # - ./config/sip_profiles/internal.xml:/etc/freeswitch/sip_profiles/internal.xml
       - /home/zaleos/Workspaces/sip-test-configuration/freeswitch/coredumps:/var/crash
-      # - ./config/dialplan/default.xml:/etc/freeswitch/dialplan/default.xml
       -  ./scripts:/etc/freeswitch/scripts
       -  ./config:/etc/freeswitch
-      # - /config/default.xml:/etc/freeswitch/default.xml
     ulimits:
       core: -1
     environment:
@@ -65,18 +57,19 @@ services:
         ipv4_address: 10.22.80.3
 
   db:
-    image: mysql:8.0.40-debian
+    build:
+      context: .
+      dockerfile: Database.Dockerfile
     environment:
-      # - MYSQL_USER=root
-      # - MYSQL_PASSWORD=password
       - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=inivr
     healthcheck:
       test: ["CMD", "mysql", "-h", "10.5.0.3", "-u", "root", "-pmysecretpassword", "-e", "SELECT 1"]
       interval: 1s
       timeout: 1s
       retries: 60
       start_period: 30s
+    volumes:
+      - ./create_free.sql:/create_free.sql
     ulimits:
       core: -1
     networks:

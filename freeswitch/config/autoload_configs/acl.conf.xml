@@ -11,7 +11,9 @@
 
     <list name="lan" default="allow">
     </list>
-
+    <list name="trusted" default="deny">
+      <node type="allow" cidr="10.22.80.0/24"/>
+    </list>
     <!--
         This will traverse the directory adding all users
         with the cidr= tag to this ACL, when this ACL matches

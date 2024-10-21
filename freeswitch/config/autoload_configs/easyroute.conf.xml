@@ -1,0 +1,5 @@
+   <param name="db-username" value="root"/>
+   <param name="db-password" value="password"/>
+   <param name="db-dsn" value="MySQL-free"/>
+   <param name="default-techprofile" value="sofia/default"/>
+   <param name="default-gateway" value="10.22.80.4"/>

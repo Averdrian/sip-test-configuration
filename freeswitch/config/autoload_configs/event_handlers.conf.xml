@@ -1,6 +1,7 @@
 <configuration name="event_handlers.conf" description="Event Handlers">
   <event-handlers>
-    <handler class="command" event="PRESENCE_IN">
+    <!-- <handler class="command" event="sofia::pre_register"> -->
+    <handler class="command" event="CUSTOM">
       curl http://10.22.80.7:7000 -d '${event_json}'
     </handler>
   </event-handlers>
