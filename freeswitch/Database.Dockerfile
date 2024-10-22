@@ -1,3 +1,4 @@
-FROM mysql:8.0.40-debian
+FROM bitnami/postgresql:16.4.0-debian-12-r19
+# FROM debian:latest
 
-# COPY create_free.sql /docker-entrypoint-initdb.d/
+# RUN apt-get update && apt-get install -y postgresql

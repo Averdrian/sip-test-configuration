@@ -43,6 +43,8 @@
         && echo "deb-src [signed-by=/usr/share/keyrings/signalwire-freeswitch-repo.gpg] http://files.freeswitch.org/repo/deb/debian-release/ `lsb_release -sc` main" >> /etc/apt/sources.list.d/freeswitch.list \
         && apt-get purge -y --auto-remove curl
     
+    RUN apt-get install -y unixodbc unixodbc-dev odbc-postgresql
+    
     # Module list based on the minimal config:
     # https://github.com/signalwire/freeswitch/blob/master/conf/minimal/modules.conf
     # Added also mod_http_cache to playback remote files
@@ -61,7 +63,9 @@
         freeswitch-mod-curl \
         freeswitch-mod-easyroute \
         freeswitch-mod-lcr \
+        curl \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
+    
     
     # Clean up
     RUN apt-get autoremove
@@ -95,9 +99,15 @@
         CMD  fs_cli -x status | grep -q ^UP || exit 1
     
     ## Add additional things here
-    
+
+        
+    COPY ./odbc.ini /etc/odbc.ini
+    COPY ./odbcinst.ini /etc/odbcinst.ini
+
     ##
     
     ENTRYPOINT ["/entrypoint.sh"]
     CMD ["freeswitch"]
     # CMD ["bash"]
+
+

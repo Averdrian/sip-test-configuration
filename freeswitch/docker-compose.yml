@@ -34,19 +34,18 @@ services:
     - NET_ADMIN
 
   freeswitch:
-    # image: ghcr.io/zaleos/inivr-dev-system-db:1
     build:
       context: .
       dockerfile: FreeSwitch.Dockerfile
       args:
         - USER_ID=1000
         - GROUP_ID=1000
-      # labels:
-        # - or.opencontainers.image.source=https://github.com/Averdrian/sip-test-configuration
     volumes:
       - /home/zaleos/Workspaces/sip-test-configuration/freeswitch/coredumps:/var/crash
       -  ./scripts:/etc/freeswitch/scripts
       -  ./config:/etc/freeswitch
+      # - ./odbc.ini:/etc/odbc.ini
+      # - ./odbcinst.ini:/etc/odbcinst.ini
     ulimits:
       core: -1
     environment:
@@ -61,33 +60,21 @@ services:
       context: .
       dockerfile: Database.Dockerfile
     environment:
-      - MYSQL_ROOT_PASSWORD=password
-    healthcheck:
-      test: ["CMD", "mysql", "-h", "10.5.0.3", "-u", "root", "-pmysecretpassword", "-e", "SELECT 1"]
-      interval: 1s
-      timeout: 1s
-      retries: 60
-      start_period: 30s
+      - POSTGRESQL_PASSWORD=1234
+    # healthcheck:
+    #   test: ["CMD", "mysql", "-h", "10.5.0.3", "-u", "root", "-pmysecretpassword", "-e", "SELECT 1"]
+    #   interval: 1s
+    #   timeout: 1s
+    #   retries: 60
+    #   start_period: 30s
     volumes:
       - ./create_free.sql:/create_free.sql
+      - ./feed.sql:/feed.sql
     ulimits:
       core: -1
     networks:
       system-test:
         ipv4_address: 10.22.80.4
-
-  web_service:
-    build:
-      context: .
-      dockerfile: Flask.Dockerfile
-    tty: true
-    volumes:
-    -  ./web_service:/app
-    ports:
-    -  "7000:7000"
-    networks:
-      system-test:
-        ipv4_address: 10.22.80.7
 
 networks:
   system-test:

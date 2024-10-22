@@ -19,7 +19,7 @@ USE free;
    LOCK TABLES `gateways` WRITE;
 
 --   /*!40000 ALTER TABLE `gateways` DISABLE KEYS */;
-  INSERT INTO `gateways` VALUES (1,'192.168.99.1','mustang',50,'sofia/default');
+  INSERT INTO `gateways` VALUES (1,'10.22.80.1','mustang',50,'sofia/default');
 
 --   /*!40000 ALTER TABLE `gateways` ENABLE KEYS */;
   UNLOCK TABLES;
