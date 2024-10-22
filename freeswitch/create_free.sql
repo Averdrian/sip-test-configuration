@@ -1,107 +1,117 @@
+-- Crear base de datos si no existe
+CREATE DATABASE free;
 
-CREATE DATABASE IF NOT EXISTS free;
+-- Usar la base de datos creada (en PostgreSQL tendrías que conectarte manualmente a la base de datos)
+\c free;
 
--- Usar la base de datos creada
-USE free;
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS gateways;
 
+-- Crear tabla `gateways`
+CREATE TABLE gateways (
+   gateway_id SERIAL PRIMARY KEY,
+   gateway_ip VARCHAR(16) NOT NULL,
+   "group" VARCHAR(15) NOT NULL,
+   "limit" INTEGER NOT NULL,
+   techprofile VARCHAR(128) NOT NULL
+);
 
+-- Insertar datos en `gateways`
+INSERT INTO gateways (gateway_ip, "group", "limit", techprofile)
+VALUES 
+   ('10.22.80.1', 'mustang', 50, 'sofia/default');
 
-   DROP TABLE IF EXISTS `gateways`;
-   CREATE TABLE `gateways` (
-      `gateway_id` int(10) unsigned NOT NULL auto_increment,
-      `gateway_ip` varchar(16) NOT NULL,
-      `group` varchar(15) NOT NULL,
-      `limit` int(10) unsigned NOT NULL,
-      `techprofile` varchar(128) NOT NULL,
-      PRIMARY KEY  (`gateway_id`),
-      KEY `gateway_ip` (`gateway_ip`,`group`)
-   ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Gateways Table';
-   LOCK TABLES `gateways` WRITE;
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS numbers;
 
---   /*!40000 ALTER TABLE `gateways` DISABLE KEYS */;
-  INSERT INTO `gateways` VALUES (1,'10.22.80.1','mustang',50,'sofia/default');
+-- Crear tabla `numbers`
+CREATE TABLE numbers (
+   number_id SERIAL PRIMARY KEY,
+   gateway_id INTEGER NOT NULL,
+   number VARCHAR(16) NOT NULL UNIQUE,
+   acctcode VARCHAR(16) NOT NULL,
+   translated VARCHAR(16) NOT NULL,
+   FOREIGN KEY (gateway_id) REFERENCES gateways (gateway_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
---   /*!40000 ALTER TABLE `gateways` ENABLE KEYS */;
-  UNLOCK TABLES;
- 
-  DROP TABLE IF EXISTS `numbers`;
-  CREATE TABLE `numbers` (
- `number_id` int(10) unsigned NOT NULL auto_increment,
- `gateway_id` int(10) unsigned NOT NULL,
- `number` varchar(16) NOT NULL,
- `acctcode` varchar(16) NOT NULL,
- `translated` varchar(16) NOT NULL,
-  PRIMARY KEY  (`number_id`),
-  UNIQUE KEY `number` (`number`),
-  KEY `gateway_id` (`gateway_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Numbers Table';
-  LOCK TABLES `numbers` WRITE;
+-- Insertar datos en `numbers`
+INSERT INTO numbers (gateway_id, number, acctcode, translated)
+VALUES 
+   (1, '19018577141', '999999', '9018577141'),
+   (1, '19995551212', '666666', '9995551212');
 
---   /*!40000 ALTER TABLE `numbers` DISABLE KEYS */;
-  INSERT INTO `numbers` VALUES (1,1,'19018577141','999999', '9018577141'),(2,1,'19995551212','666666', '9995551212');
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS carriers;
 
---   /*!40000 ALTER TABLE `numbers` ENABLE KEYS */;
-  UNLOCK TABLES;
+-- Crear tabla `carriers`
+CREATE TABLE carriers (
+   id SERIAL PRIMARY KEY,
+   carrier_name VARCHAR(255),
+   enabled BOOLEAN NOT NULL DEFAULT TRUE
+);
 
-   DROP TABLE IF EXISTS `carriers`;
-   CREATE TABLE `carriers` (
-  `id` int(11) NOT NULL auto_increment,
-  `carrier_name` varchar(255) default NULL,
-  `enabled` boolean NOT NULL DEFAULT '1',
-   PRIMARY KEY  (`id`)
-   ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS lcr;
 
-  DROP TABLE IF EXISTS `lcr`;
-  CREATE TABLE `lcr` (
-  `id` int(11) NOT NULL auto_increment,
-  `digits` varchar(15) default NULL,
-  `rate` float(11,5) unsigned NOT NULL,
-  `intrastate_rate` float(11, 5) unsigned NOT NULL,
-  `intralata_rate` float(11, 5) unsigned NOT NULL,
-  `carrier_id` int(11) NOT NULL,
-  `lead_strip` int(11) NOT NULL,
-  `trail_strip` int(11) NOT NULL,
-  `prefix` varchar(16) NOT NULL,
-  `suffix` varchar(16) NOT NULL,
-  `lcr_profile` varchar(32) default NULL,
-  `date_start` datetime NOT NULL DEFAULT '1970-01-01',
-  `date_end` datetime NOT NULL DEFAULT '2030-12-31',
-  `quality` float(10,6) NOT NULL,
-  `reliability` float(10,6) NOT NULL,
-  `cid` varchar(32) NOT NULL DEFAULT '',
-  `enabled` boolean NOT NULL DEFAULT '1',
-   PRIMARY KEY  (`id`),
-   KEY `carrier_id` (`carrier_id`),
-   KEY `digits` (`digits`),
-   KEY `lcr_profile` (`lcr_profile`),
-   KEY `rate` (`rate`),
-   KEY `digits_profile_cid_rate` USING BTREE (`digits`,`rate`),
-   CONSTRAINT `carrier_id` FOREIGN KEY (`carrier_id`) REFERENCES `carriers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-   ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+-- Crear tabla `lcr`
+CREATE TABLE lcr (
+   id SERIAL PRIMARY KEY,
+   digits VARCHAR(15),
+   rate NUMERIC(11,5) NOT NULL,
+   intrastate_rate NUMERIC(11,5) NOT NULL,
+   intralata_rate NUMERIC(11,5) NOT NULL,
+   carrier_id INTEGER NOT NULL,
+   lead_strip INTEGER NOT NULL,
+   trail_strip INTEGER NOT NULL,
+   prefix VARCHAR(16) NOT NULL,
+   suffix VARCHAR(16) NOT NULL,
+   lcr_profile VARCHAR(32),
+   date_start TIMESTAMP NOT NULL DEFAULT '1970-01-01',
+   date_end TIMESTAMP NOT NULL DEFAULT '2030-12-31',
+   quality NUMERIC(10,6) NOT NULL,
+   reliability NUMERIC(10,6) NOT NULL,
+   cid VARCHAR(32) NOT NULL DEFAULT '',
+   enabled BOOLEAN NOT NULL DEFAULT TRUE,
+   FOREIGN KEY (carrier_id) REFERENCES carriers (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
+-- Crear índices adicionales en `lcr`
+CREATE INDEX carrier_id_idx ON lcr (carrier_id);
+CREATE INDEX digits_idx ON lcr (digits);
+CREATE INDEX lcr_profile_idx ON lcr (lcr_profile);
+CREATE INDEX rate_idx ON lcr (rate);
+CREATE INDEX digits_profile_cid_rate_idx ON lcr (digits, rate);
 
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS npa_nxx_company_ocn;
 
-   DROP TABLE IF EXISTS `npa_nxx_company_ocn`;
-   CREATE TABLE npa_nxx_company_ocn (
-   npa smallint NOT NULL,
-   nxx smallint NOT NULL,
-   company_type text,
-   ocn text,
-   company_name text,
-   lata integer,
-   ratecenter text,
-   state text
-   );
-   CREATE UNIQUE INDEX npanxx_idx USING BTREE ON npa_nxx_company_ocn (npa, nxx);
+-- Crear tabla `npa_nxx_company_ocn`
+CREATE TABLE npa_nxx_company_ocn (
+   npa SMALLINT NOT NULL,
+   nxx SMALLINT NOT NULL,
+   company_type TEXT,
+   ocn TEXT,
+   company_name TEXT,
+   lata INTEGER,
+   ratecenter TEXT,
+   state TEXT
+);
 
-   DROP TABLE IF EXISTS `carrier_gateway`;
-   CREATE TABLE `carrier_gateway` (
-  `id` int(11) NOT NULL auto_increment,
-  `carrier_id` int(11) default NULL,
-  `prefix` varchar(255) NOT NULL,
-  `suffix` varchar(255) NOT NULL,
-  `codec` varchar(255) NOT NULL,
-  `enabled` boolean NOT NULL DEFAULT '1',
-  PRIMARY KEY  (`id`),
-  KEY `carrier_id` (`carrier_id`)
-  ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+-- Crear índice único en `npa_nxx_company_ocn`
+CREATE UNIQUE INDEX npanxx_idx ON npa_nxx_company_ocn (npa, nxx);
+
+-- Eliminar tabla si existe
+DROP TABLE IF EXISTS carrier_gateway;
+
+-- Crear tabla `carrier_gateway`
+CREATE TABLE carrier_gateway (
+   id SERIAL PRIMARY KEY,
+   carrier_id INTEGER REFERENCES carriers (id),
+   prefix VARCHAR(255) NOT NULL,
+   suffix VARCHAR(255) NOT NULL,
+   codec VARCHAR(255) NOT NULL,
+   enabled BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+-- Crear índice en `carrier_gateway`
+CREATE INDEX carrier_id_idx ON carrier_gateway (carrier_id);
